@@ -10,8 +10,8 @@ import {
 	htmlToMarkdown
 } from 'obsidian';
 
-import {inputPrompt} from './user_prompt_modals'
-
+import {inputPrompt} from './gui/inputPrompt'
+import {suggester} from './gui/suggester'
 import {log, error, max} from './utils';
 
 export async function insertNewFootNote(app: App){
@@ -47,7 +47,7 @@ export async function insertNewFootNote(app: App){
         newFootnoteText = defaultNewFootnoteText;
     }
 
-    var insertion = `[^${newId}]`;
+    const insertion = `[^${newId}]`;
     const footnotesText = 
         footnotes_nid.map(f => `[^${f.id}]: ${f.text}`).concat([`[^${newId}]: ${newFootnoteText.trim()}`]).concat(footnotes_txtid.map(f => `[^${f.id}]: ${f.text}`)).join("\n");
     editor.replaceRange(insertion, {line: cursorLine, ch: cursorCh}); // insert [^newId]
@@ -124,4 +124,41 @@ async function getAndExpandClipboardText(): Promise<string> {
         return clipLines.join("<br>");
     }
     return "";
+}
+
+export async function insertExistFootnote(app: App){
+    const editor = getEditor(app);
+    const lastLine = editor.lastLine();
+    const {startOfFootnotes, endOfFootnotes, endOfText} = parseTail(editor);
+    const footnotes = parseFootnotes(editor, startOfFootnotes, endOfFootnotes);
+    var footnotes_txtid = footnotes.filter(f =>  isNaN(Number(f.id)));
+    var footnotes_nid = footnotes.filter(f => !isNaN(Number(f.id)));
+    footnotes_txtid.sort((a, b) => a.id.localeCompare(b.id));
+    footnotes_nid.sort((a, b) => a.id.localeCompare(b.id));
+
+    // # check cursor position
+    console.log("check cursor position");
+    const {line: cursorLine, ch: cursorCh} = editor.getCursor()
+    if (cursorLine>=startOfFootnotes) {
+        error("Cursor should not be in the region of footnotes.");
+    }
+
+    // # select footnote
+    console.log("select footnote");
+    const pickedId = await suggester(
+        app,
+        footnotes.map((footnote) => `[^${footnote.id}]: ${footnote.text}`),
+        footnotes.map((footnote) => footnote.id)
+    );
+    if (pickedId==null){
+        console.log("Operation canceled by user.");
+        log("Operation canceled by user.", 5);
+        return;
+    }
+
+    const insertion = `[^${pickedId}]`;
+    editor.replaceRange(insertion, {line: cursorLine, ch: cursorCh}); // insert [^newId]
+    editor.setCursor({line: cursorLine, ch: cursorCh+insertion.length});
+
+    log(`Footnote [^${pickedId}] added successfully.`, 5);
 }

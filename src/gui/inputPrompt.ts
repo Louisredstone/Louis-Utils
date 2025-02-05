@@ -10,8 +10,6 @@ import {
 	htmlToMarkdown
 } from 'obsidian';
 
-import { log } from './utils';
-
 export async function inputPrompt(header: string, pre_description?: string, post_description?: string, placeholder?: string, value?: string): Promise<string|null>{
     // var return_value = null;
     // const modal = new InputPromptModal(this.app, async (value: string|null) => {return_value = value;}, header, pre_description, post_description, placeholder, value);
