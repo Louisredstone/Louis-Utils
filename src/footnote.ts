@@ -38,7 +38,7 @@ export async function insertNewFootNote(app: App){
         newId = parseInt(footnotes_nid[footnotes_nid.length-1].id)+1;
 
     var defaultNewFootnoteText = await getAndExpandClipboardText();
-    var newFootnoteText = await inputPrompt("Add New Footnote", "Enter the text of the new footnote:", "", defaultNewFootnoteText, "");
+    var newFootnoteText = await inputPrompt("Insert New Footnote", "Enter the text of the new footnote:", "", defaultNewFootnoteText, "");
     if (newFootnoteText==null || newFootnoteText.trim()=="" && defaultNewFootnoteText==""){
         console.log("Operation canceled by user.");
         log("Operation canceled by user.", 5);
@@ -54,26 +54,7 @@ export async function insertNewFootNote(app: App){
     editor.replaceRange("\n"+footnotesText, {line: max(endOfText, cursorLine+1), ch: 0}, {line: lastLine+1, ch: 0})
     editor.setCursor({line: cursorLine, ch: cursorCh+insertion.length});
 
-    log(`Footnote [^${newId}] added successfully.`, 5);
-    // const modal = new AddFootNoteModal(app, defaultNewFootnoteText, async (newFootnoteText: string) => {
-    //     if (newFootnoteText==null || newFootnoteText.trim()=="" && defaultNewFootnoteText==""){
-    //         console.log("Operation canceled by user.");
-    //         log("Operation canceled by user.", 5);
-    //         return;
-    //     } else if (newFootnoteText.trim()==""){
-    //         newFootnoteText = defaultNewFootnoteText;
-    //     }
-
-    //     var insertion = `[^${newId}]`;
-    //     const footnotesText = 
-    //         footnotes_nid.map(f => `[^${f.id}]: ${f.text}`).concat([`[^${newId}]: ${newFootnoteText.trim()}`]).concat(footnotes_txtid.map(f => `[^${f.id}]: ${f.text}`)).join("\n");
-    //     editor.replaceRange(insertion, {line: cursorLine, ch: cursorCh}); // insert [^newId]
-    //     editor.replaceRange("\n"+footnotesText, {line: max(endOfText, cursorLine+1), ch: 0}, {line: lastLine+1, ch: 0})
-    //     editor.setCursor({line: cursorLine, ch: cursorCh+insertion.length});
-    
-    //     log(`Footnote [^${newId}] added successfully.`, 5);
-    // });
-    // modal.open();
+    log(`New footnote [^${newId}] inserted successfully.`, 5);
 }
 
 function getEditor(app: App){
@@ -144,46 +125,3 @@ async function getAndExpandClipboardText(): Promise<string> {
     }
     return "";
 }
-
-// class AddFootNoteModal extends Modal {
-//     private title: string = "Add Footnote";
-//     private defaultText: string;
-//     private callback: (value: string) => Promise<void>;
-
-//     constructor(app: App, defaultText: string = "", callback: (value: string) => Promise<void> = () => Promise.resolve()) {
-// 		super(app);
-//         this.defaultText = defaultText;
-//         this.callback = callback;
-// 	}
-
-// 	async onOpen() {
-//         console.log("Calling: AddFootNote.onOpen()")
-//         console.log("prepare local variables");
-// 		const {contentEl} = this;
-        
-//         console.log("prompt user for input");
-//         contentEl.createEl('h2', {text: this.title})
-//         const inputEl = contentEl.createEl('input', {attr: {type: 'text', placeholder: this.defaultText}});
-
-//         inputEl.addEventListener('keydown', async (event: KeyboardEvent) => {
-//             if (event.key === 'Enter') {
-//                 event.stopPropagation();
-//                 event.preventDefault(); // Don't delete this line. It prevents a weird bug.
-//                 log("key 'enter' detected.", 3);
-//                 var str = inputEl.value.trim();
-//                 await this.callback(str);
-//                 this.close();
-//             } else if (event.key === 'Escape') {
-//                 log("Operation cancelled by user.", 3);
-//                 this.close();
-//             }
-//         });
-//         inputEl.focus();
-// 	}
-
-// 	onClose() {
-//         console.log("Calling: AddFootNote.onClose()")
-// 		const {contentEl} = this;
-// 		contentEl.empty();
-// 	}
-// }
