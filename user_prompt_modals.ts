@@ -52,7 +52,7 @@ class InputPromptModal extends Modal {
         if (this.pre_description){
             contentEl.createEl('p', {text: this.pre_description})
         }
-        const inputEl = contentEl.createEl('input', {attr: {type: 'text', placeholder: placeholder, value: value}});
+        const inputEl = contentEl.createEl('input', {attr: {type: 'text', placeholder: placeholder, value: value}, cls: 'full-width-input'});
         if (this.post_description){
             contentEl.createEl('p', {text: this.post_description})
         }
