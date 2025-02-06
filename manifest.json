@@ -1,7 +1,7 @@
 {
 	"id": "louis-utils",
 	"name": "Louis' Utils",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "A collection of useful Obsidian plugins and utilities.",
 	"author": "Louis",

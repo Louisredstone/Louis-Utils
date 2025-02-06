@@ -1,18 +1,12 @@
 import { 
 	App, 
-	Editor, 
-	MarkdownView, 
-	Modal, 
-	Notice, 
-	Plugin, 
-	PluginSettingTab, 
-	Setting, 
+	Editor,
 	htmlToMarkdown
 } from 'obsidian';
 
 import {inputPrompt} from './gui/inputPrompt'
 import {suggester} from './gui/suggester'
-import {log, error, max} from './utils';
+import {log, error, max, getEditor} from './utils';
 
 export async function insertNewFootNote(app: App){
     const editor = getEditor(app);
@@ -55,12 +49,6 @@ export async function insertNewFootNote(app: App){
     editor.setCursor({line: cursorLine, ch: cursorCh+insertion.length});
 
     log(`New footnote [^${newId}] inserted successfully.`, 5);
-}
-
-function getEditor(app: App){
-    const activeEditor = app.workspace.activeEditor!;
-    const editor = activeEditor.editor!;
-    return editor;
 }
 
 function parseTail(editor: Editor){

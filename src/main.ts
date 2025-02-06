@@ -10,6 +10,9 @@ import {
 	htmlToMarkdown
 } from 'obsidian';
 import {insertNewFootNote, insertExistFootnote} from './footnote';
+import { convertToHalfWidthCharacters } from './convert_chars';
+import { cycleListItemType } from './listitem';
+import { setTimestamp } from './timestamp';
 
 // Remember to rename these classes and interfaces!
 
@@ -70,6 +73,30 @@ export default class LouisUtilsPlugin extends Plugin {
 			}
 		});
 
+		this.addCommand({
+			id: 'convert-full-width-to-half-width',
+			name: 'Convert Full-Width to Half-Width',
+			callback: () => {
+				convertToHalfWidthCharacters(this.app);
+			}
+		});
+
+		this.addCommand({
+			id: 'cycle-list-item-type',
+			name: 'Cycle List Item Type',
+			callback: () => {
+				cycleListItemType(this.app);
+			}
+		})
+
+		this.addCommand({
+			id:'set-timestamp',
+			name: 'Set Timestamp',
+			callback: () => {
+				setTimestamp(this.app);
+			}
+		})
+
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new LouisUtilsSettingTab(this.app, this));
 
@@ -84,7 +111,7 @@ export default class LouisUtilsPlugin extends Plugin {
 	}
 
 	onunload() {
-
+		
 	}
 
 	async loadSettings() {

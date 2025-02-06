@@ -23,3 +23,9 @@ export function error(msg: string) {
 export function max(a: number, b: number): number {
 	return a>b? a : b;
 }
+
+export function getEditor(app: App){
+    const activeEditor = app.workspace.activeEditor!;
+    const editor = activeEditor.editor!;
+    return editor;
+}
