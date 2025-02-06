@@ -1,94 +1,148 @@
-# Obsidian Sample Plugin
+# Obsidian Louis' Utils
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+This is a plugin for Obsidian (https://obsidian.md).
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+# Features
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+This plugin provides the following features as commands (in obsidian):
+- Add timestamp to the current line.
+- Insert a new footnote.
+- Insert an existing footnote.
+- Cycle list item type.
+- Convert chinese (full-width) punctuation to half-width.
 
-## First time developing plugins?
+# Usage
 
-Quick starting guide for new plugin devs:
+## Add timestamp to the current line
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+Command: `Louis' Utils: Set Timestamp`
 
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+Effect example 1 (add timestamp):
+```text
+Normal text.
+↓
+12:34 Normal text.
 ```
 
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+Effect example 2 (update timestamp):
+```text
+12:34 Normal text.
+↓
+12:35 Normal text.
 ```
 
-## API Documentation
+Effect example 3 (support task items):
+```text
+- Task item
+↓
+- 12:34 Task item
+```
 
-See https://github.com/obsidianmd/obsidian-api
+Effect example 4 (support indent):
+```text
+    - Task item
+↓
+    - 12:34 Task item
+```
+
+## Insert a new footnote
+
+Command: `Louis' Utils: Insert New Footnote`
+
+Effect example 1 (add a new footnote while the bottom is empty):
+```text
+Normal text. (cursor here)
+...
+EOF
+↓
+Normal text. [^1]
+...
+[^1]: Footnote content.
+EOF
+```
+
+Effect example 2 (if there exists footnotes, sort them.):
+```text
+Normal text. (cursor here)
+...
+[^3]: Footnote 3.
+[^1]: Footnote 1.
+[^beef]: Footnote beef.
+EOF
+↓
+Normal text. [^4]
+...
+[^1]: Footnote 1.
+[^3]: Footnote 3.
+[^4]: Footnote 4.
+[^beef]: Footnote beef.
+EOF
+```
+Need to mention that the new footnote id is increased by 1 from the largest footnote id, even if there are gaps in the id sequence.
+
+Effect example 3 (safety):
+```text
+Normal text.
+...
+[^1]: Footnote 1.
+[^2]: Footnote 2. (cursor here)
+[^3]: Footnote 3.
+EOF
+↓
+<Raise an error>
+```
+
+We do not support footnote id inside the footnote content. If you really need to do so, do it manually.
+
+## Insert an existing footnote
+
+Command: `Louis' Utils: Insert Existing Footnote`
+
+Effect example:
+```text
+Normal text. (cursor here)
+...
+[^1]: Footnote 1.
+[^2]: Footnote 2.
+EOF
+↓ (User selects footnote 2)
+Normal text. [^2]
+...
+[^1]: Footnote 1.
+[^2]: Footnote 2.
+EOF
+```
+
+Again, we do not support footnote id inside the footnote content. If you really need to do so, do it manually.
+
+## Cycle list item type
+
+Command: `Louis' Utils: Cycle List Item Type`
+
+Effect example:
+```text
+- Task item
+↓
+- [ ] Task item
+↓
+- [x] Task item
+↓
+- × Task item
+↓
+- Task item
+```
+
+Need to mention that you may select multiple lines and run the command on them all at once.
+
+## Convert chinese (full-width) punctuation to half-width
+
+Command: `Louis' Utils: Convert Full-Width to Half-Width`
+
+Effect example:
+```text
+祝您身体健康，再见！
+↓
+祝您身体健康, 再见!
+```
+
+This command is useful if you use math equations a lot and prefers to use half-width punctuation with chinese characters.

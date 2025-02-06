@@ -9,7 +9,7 @@ import {
 	Setting, 
 	htmlToMarkdown
 } from 'obsidian';
-import {insertNewFootNote, insertExistFootnote} from './footnote';
+import {insertNewFootNote, insertExistFootnote as insertExistingFootnote} from './footnote';
 import { convertToHalfWidthCharacters } from './convert_chars';
 import { cycleListItemType } from './listitem';
 import { setTimestamp } from './timestamp';
@@ -36,12 +36,12 @@ export default class LouisUtilsPlugin extends Plugin {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('pocket-knife', 'Louis\' Utils', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('Debugging!'); // DELETEME
-			insertNewFootNote(this.app);
-			// TODO: Provide all commands and functionality in a modal (panel).
-		});
+		// const ribbonIconEl = this.addRibbonIcon('pocket-knife', 'Louis\' Utils', (evt: MouseEvent) => {
+		// 	// Called when the user clicks the icon.
+		// 	new Notice('Debugging!'); // DELETEME
+		// 	insertNewFootNote(this.app);
+		// 	// TODO: Provide all commands and functionality in a modal (panel).
+		// });
 		// // Perform additional things with the ribbon
 		// ribbonIconEl.addClass('louis-utils-plugin-ribbon-class'); // css, if needed
 
@@ -66,10 +66,10 @@ export default class LouisUtilsPlugin extends Plugin {
 		});
 
 		this.addCommand({
-			id: 'insert-exist-footnote',
-			name: 'Insert Exist Footnote',
+			id: 'insert-existing-footnote',
+			name: 'Insert Existing Footnote',
 			callback: () => {
-				insertExistFootnote(this.app);
+				insertExistingFootnote(this.app);
 			}
 		});
 
@@ -98,7 +98,7 @@ export default class LouisUtilsPlugin extends Plugin {
 		})
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new LouisUtilsSettingTab(this.app, this));
+		// this.addSettingTab(new LouisUtilsSettingTab(this.app, this));
 
 		// // If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// // Using this function will automatically remove the event listener when this plugin is disabled.
@@ -111,7 +111,7 @@ export default class LouisUtilsPlugin extends Plugin {
 	}
 
 	onunload() {
-		
+
 	}
 
 	async loadSettings() {
