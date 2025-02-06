@@ -145,4 +145,4 @@ Effect example:
 祝您身体健康, 再见!
 ```
 
-This command is useful if you use math equations a lot and prefers to use half-width punctuation with chinese characters.
+This command is useful if you prefers to use half-width punctuation with chinese characters.
