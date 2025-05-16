@@ -8,7 +8,51 @@ import {inputPrompt} from './gui/inputPrompt'
 import {suggester} from './gui/suggester'
 import {log, error, max, getEditor} from './utils';
 
+export async function insertInplaceUppernote(app: App){
+    // E. g.
+    // This is a sentence with an in-place uppernote [^uppernote content].
+    // We recommend binding Ctrl+U to this command.
+    const editor = getEditor(app);
+
+    // # get cursor position
+    console.log("check cursor position");
+    const {line: cursorLine, ch: cursorCh} = editor.getCursor()
+
+    var defaultUppernoteText = await getAndExpandClipboardText();
+    var uppernoteText = await inputPrompt("Insert New Footnote", "Enter the text of the new footnote:", "", defaultUppernoteText, "");
+    if (uppernoteText==null){
+        // null means user pressed ESC or closed the prompt.
+        // empty string means user pressed Enter without entering any text, this is allowed.
+        console.log("Operation canceled by user.");
+        log("Operation canceled by user.", 5);
+        return;
+    } else if (uppernoteText.trim()==""){
+        uppernoteText = defaultUppernoteText;
+    }
+
+    uppernoteText = uppernoteText.trim();
+    var emptyInput = (uppernoteText == "");
+
+
+    if (emptyInput) {
+        editor.replaceRange("^[]", {line: cursorLine, ch: cursorCh}); // insert ^[]
+        editor.setCursor({line: cursorLine, ch: cursorCh+2}); // move cursor to the middle of ^[]
+    }
+    else {
+        const insertion = `^[${uppernoteText}]`;
+        editor.replaceRange(insertion, {line: cursorLine, ch: cursorCh}); // insert [^uppernoteText]
+        editor.setCursor({line: cursorLine, ch: cursorCh+insertion.length});
+    }
+
+    log(`New footnote [^${uppernoteText}] inserted successfully.`, 5);
+}
+
 export async function insertNewFootNote(app: App){
+    // E. g.
+    // This is a sentence with a footnote [^1].
+    // ...
+    // [^1]: footnote content
+    // We recommend binding Ctrl+Shift+U to this command.
     const editor = getEditor(app);
     const lastLine = editor.lastLine();
     const {startOfFootnotes, endOfFootnotes, endOfText} = parseTail(editor);
@@ -101,6 +145,12 @@ function parseFootnotes(editor: Editor, start: number, end: number){
 }
 
 async function getAndExpandClipboardText(): Promise<string> {
+    // Check if clipboard contains rich content (e.g. HTML) or plain text.
+    // This is useful when copying text from web pages or apps, especially from Zotero PDF reader.
+    // In common apps, pressing Ctrl+V will paste MD link format, while pressing Ctrl+Shift+V will paste plain text.
+    // However, in Zotero, pressing Ctrl+V will paste plain text, while pressing Ctrl+Shift+V will paste rich content.
+    //   This is inconvenient.
+    // Through this function, we can automatically choose a longer one.
     console.log("get content from clipboard");
     if (navigator.clipboard){
         var item = await navigator.clipboard.read();
@@ -115,6 +165,7 @@ async function getAndExpandClipboardText(): Promise<string> {
 }
 
 export async function insertExistFootnote(app: App){
+    // We recommend binding Ctrl+Alt+U to this command.
     const editor = getEditor(app);
     const lastLine = editor.lastLine();
     const {startOfFootnotes, endOfFootnotes, endOfText} = parseTail(editor);

@@ -45,6 +45,26 @@ Effect example 4 (support indent):
     - 12:34 Task item
 ```
 
+## Insert an in-place uppernote
+
+Command: `Louis' Utils: Insert In-place Uppernote`
+
+Effect example 1:
+```text
+Normal text. (cursor here)
+↓
+Normal text. ^[some content] (cursor here)
+```
+
+Effect example 2: 
+```text
+Normal text. (cursor here)
+↓
+Normal text. ^[(cursor here)]
+```
+You can insert an empty uppernote by running the command and input a space before pressing enter.
+The cursor will be moved into the new uppernote so that you can edit it.
+
 ## Insert a new footnote
 
 Command: `Louis' Utils: Insert New Footnote`
