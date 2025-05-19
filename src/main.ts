@@ -9,7 +9,7 @@ import {
 	Setting, 
 	htmlToMarkdown
 } from 'obsidian';
-import {insertNewFootNote, insertExistFootnote as insertExistingFootnote} from './footnote';
+import { insertNewFootNote, insertExistFootnote as insertExistingFootnote } from './footnote';
 import { convertToHalfWidthCharacters } from './convert_chars';
 import { cycleListItemType } from './listitem';
 import { setTimestamp } from './timestamp';
