@@ -49,7 +49,7 @@ export async function insertInplaceUppernote(app: App){
     log(`New footnote [^${uppernoteText}] inserted successfully.`, 5);
 }
 
-export async function insertVocabularyFromZotero(app: App){
+export async function insertSimpleAnnLinkFromZotero(app: App){
     // E.g.
     // A zotero link: “text” ([Author et. al, 2022](zotero://select/library/items/SQLKEY)) ([pdf](zotero://open-pdf/library/items/SQLKEY?sel=p%3Anth-child(12)&annotation=SQLKEY))
     // By calling this command, this link will be transformed as: [text](zotero://open-pdf/library/items/SQLKEY?sel=p%3Anth-child(12)&annotation=SQLKEY)
@@ -64,11 +64,11 @@ export async function insertVocabularyFromZotero(app: App){
     var defaultZoteroAnnLink = await getAndExpandClipboardText();
     var res = parseZoteroAnnotationLink(defaultZoteroAnnLink);
     if (res){
-        log("Zotero link detected. Converting to Obsidian link.");
-        console.log("Zotero link detected. Converting to Obsidian link.");
+        log("Zotero annotation link detected. Converting to Simple Annotation link.");
+        console.log("Zotero annotation link detected. Converting to Simple Annotation link.");
     } else {
-        console.log("No Zotero link detected. Prompting user.");
-        var zoteroAnnLink = await inputPrompt("Insert vocabulary from Zotero", "Enter the zotero annotation link:", "", "“text” ([...](zotero://...)) ([...](zotero://...))", "");
+        console.log("No Zotero annotation link detected. Prompting user.");
+        var zoteroAnnLink = await inputPrompt("Insert Simple Annotation link from Zotero", "Enter the zotero annotation link:", "", "“text” ([...](zotero://...)) ([...](zotero://...))", "");
         if (zoteroAnnLink==null){
             // null means user pressed ESC or closed the prompt.
             // empty string means user pressed Enter without entering any text, this is allowed.
@@ -88,7 +88,7 @@ export async function insertVocabularyFromZotero(app: App){
     editor.replaceRange(insertion, {line: cursorLine, ch: cursorCh}); // insert
     editor.setCursor({line: cursorLine, ch: cursorCh+insertion.length});
 
-    log(`New vocabulary link [${res.text}](${res.annotationLink}) inserted successfully.`, 5);
+    log(`New Simple Annotation link [${res.text}](${res.annotationLink}) inserted successfully.`, 5);
 }
 
 export async function insertNewFootNote(app: App){

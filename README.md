@@ -7,7 +7,7 @@ This is a plugin for Obsidian (https://obsidian.md).
 This plugin provides the following features as commands (in obsidian):
 - Add timestamp to the current line.
 - Insert an in-place uppernote.
-- Insert a vocabulary link converted from zotero annotation link.
+- Insert a simple annotation link converted from zotero annotation link.
 - Insert a new footnote.
 - Insert an existing footnote.
 - Cycle list item type.
@@ -67,9 +67,9 @@ Normal text. ^[(cursor here)]
 You can insert an empty uppernote by running the command and input a space before pressing enter.
 The cursor will be moved into the new uppernote so that you can edit it.
 
-## Insert a vocabulary link converted from zotero annotation link
+## Insert a simple annotation link converted from zotero annotation link
 
-Command: `Louis' Utils: Insert Vocabulary Link`
+Command: `Louis' Utils: Insert Simple Annotation Link`
 
 Effect example:
 ```text

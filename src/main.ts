@@ -9,7 +9,7 @@ import {
 	Setting, 
 	htmlToMarkdown
 } from 'obsidian';
-import { insertInplaceUppernote, insertNewFootNote, insertExistFootnote as insertExistingFootnote, insertVocabularyFromZotero } from './insert';
+import { insertInplaceUppernote, insertNewFootNote, insertExistFootnote as insertExistingFootnote, insertSimpleAnnLinkFromZotero } from './insert';
 import { convertToHalfWidthCharacters } from './convert_chars';
 import { cycleListItemType } from './listitem';
 import { setTimestamp } from './timestamp';
@@ -66,10 +66,10 @@ export default class LouisUtilsPlugin extends Plugin {
 		})
 
 		this.addCommand({
-			id: 'insert-vocabulary-from-zotero',
-			name: 'Insert Vocabulary from Zotero',
+			id: 'insert-simple-ann-link-from-zotero',
+			name: 'Insert Simple Annotation Link from Zotero',
 			callback: () => {
-				insertVocabularyFromZotero(this.app); 
+				insertSimpleAnnLinkFromZotero(this.app); 
 			}
 		})
 
