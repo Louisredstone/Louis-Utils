@@ -9,7 +9,7 @@ import {
 	Setting, 
 	htmlToMarkdown
 } from 'obsidian';
-import { insertNewFootNote, insertExistFootnote as insertExistingFootnote } from './footnote';
+import { insertInplaceUppernote, insertNewFootNote, insertExistFootnote as insertExistingFootnote, insertVocabularyFromZotero } from './insert';
 import { convertToHalfWidthCharacters } from './convert_chars';
 import { cycleListItemType } from './listitem';
 import { setTimestamp } from './timestamp';
@@ -56,6 +56,22 @@ export default class LouisUtilsPlugin extends Plugin {
 		// Change List Item Type
 		// Convert Full-Width Characters to Half-Width Characters
 		// Insert Exist Footnote
+
+		this.addCommand({
+			id: 'insert-inplace-uppernote',
+			name: 'Insert In-place Uppernote',
+			callback: () => {
+				insertInplaceUppernote(this.app);
+			}
+		})
+
+		this.addCommand({
+			id: 'insert-vocabulary-from-zotero',
+			name: 'Insert Vocabulary from Zotero',
+			callback: () => {
+				insertVocabularyFromZotero(this.app);
+			}
+		})
 
 		this.addCommand({
 			id: 'insert-new-footnote',
