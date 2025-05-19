@@ -64,7 +64,7 @@ export async function insertSimpleAnnLinkFromZotero(app: App){
     var defaultZoteroAnnLink = await getAndExpandClipboardText();
     var res = parseZoteroAnnotationLink(defaultZoteroAnnLink);
     if (res){
-        log("Zotero annotation link detected. Converting to Simple Annotation link.");
+        log("Zotero annotation link detected. Converting to Simple Annotation link.", 3);
         console.log("Zotero annotation link detected. Converting to Simple Annotation link.");
     } else {
         console.log("No Zotero annotation link detected. Prompting user.");

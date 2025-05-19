@@ -1,4 +1,4 @@
-const zoteroAnnotationLinkPattern = /[“"]([^”"]*)[”"]\s*\(\[([^\]]*)\]\((zotero\:\/\/select\/library\/items\/[A-Z0-9]+)\)\)\s*\(\[([^)]+)\]\((zotero\:\/\/open-pdf\/library\/items\/[A-Z0-9]+\?sel=.*\&annotation=[A-Z0-9]+)\)\)/;
+const zoteroAnnotationLinkPattern = /[“"]([^”"]*)[”"]\s*\(\[([^\]]*)\]\((zotero\:\/\/select\/library\/items\/[A-Z0-9]+)\)\)\s*\(\[([^)]+)\]\((zotero\:\/\/open-pdf\/library\/items\/[A-Z0-9]+\?.*\&annotation=[A-Z0-9]+)\)\)/;
 
 export function parseZoteroAnnotationLink(input: string){
     // E.g.
