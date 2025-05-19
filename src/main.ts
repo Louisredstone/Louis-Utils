@@ -69,7 +69,7 @@ export default class LouisUtilsPlugin extends Plugin {
 			id: 'insert-vocabulary-from-zotero',
 			name: 'Insert Vocabulary from Zotero',
 			callback: () => {
-				insertVocabularyFromZotero(this.app);
+				insertVocabularyFromZotero(this.app); 
 			}
 		})
 
